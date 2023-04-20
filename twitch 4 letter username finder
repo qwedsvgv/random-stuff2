@@ -1,0 +1,104 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyN/mLMo4kwNKPlQwweR8Bev",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/qwedsvgv/random-stuff2/blob/main/twitch%204%20letter%20username%20finder\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "\n",
+        "# Replace the values below with your own Client ID, Client Secret, and Redirect URI\n",
+        "client_id = \"q2hwig2e67kld0pfn6gajd69ytgngc\"\n",
+        "client_secret = \"r7cwu3akh24zzd7x9eo90qxcywdahn\"\n",
+        "redirect_uri = \"https://colab.research.google.com/drive/1iecuRooNeXEm0IFwQdd5zRPNPk4rihU6#scrollTo=TEoSybK21GKt\"\n",
+        "\n",
+        "# Make a request to the Twitch API's authorization endpoint\n",
+        "url = f\"https://id.twitch.tv/oauth2/token?client_id={client_id}&client_secret={client_secret}&grant_type=client_credentials\"\n",
+        "response = requests.post(url)\n",
+        "\n",
+        "# Extract the access token from the response\n",
+        "access_token = response.json()[\"access_token\"]\n",
+        "print(access_token)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TEoSybK21GKt",
+        "outputId": "68d88c72-877f-45a8-dddd-0391a1c6f4e4"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "1fo9ahmcqpqxtjjrn7ywiwmfd4dsw2\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "import time\n",
+        "\n",
+        "def check_usernames():\n",
+        "    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n",
+        "    base_url = \"https://api.twitch.tv/helix/users\"\n",
+        "    headers = {\"Client-ID\": \"q2hwig2e67kld0pfn6gajd69ytgngc\", \"Authorization\": \"Bearer 1fo9ahmcqpqxtjjrn7ywiwmfd4dsw2\"}\n",
+        "    available_usernames = []\n",
+        "\n",
+        "    for char1 in alphabet:\n",
+        "        for char2 in alphabet:\n",
+        "            for char3 in alphabet:\n",
+        "                for char4 in alphabet:\n",
+        "                    username = char1 + char2 + char3 + char4\n",
+        "                    params = {\"login\": username}\n",
+        "                    r = requests.get(base_url, headers=headers, params=params)\n",
+        "                    if r.json()[\"data\"]:\n",
+        "                        print(f\"{username} is taken.\")\n",
+        "                    else:\n",
+        "                        available_usernames.append(username)\n",
+        "                        print(f\"{username} is available.\")\n",
+        "    \n",
+        "    return available_usernames\n",
+        "\n",
+        "while True:\n",
+        "    available_usernames = check_usernames()\n",
+        "    print(\"Available usernames: \", available_usernames)\n",
+        "    time.sleep(10)\n"
+      ],
+      "metadata": {
+        "id": "SOWxRyTX3s8y"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
